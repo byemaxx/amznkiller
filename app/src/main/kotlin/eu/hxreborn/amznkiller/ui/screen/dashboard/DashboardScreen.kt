@@ -124,12 +124,7 @@ fun DashboardScreen(
                                 } else {
                                     LocalTextStyle.current
                                 },
-                            maxLines =
-                                if (isExpandedSlot) {
-                                    Tokens.EXPANDED_TITLE_MAX_LINES
-                                } else {
-                                    1
-                                },
+                            maxLines = if (isExpandedSlot) Tokens.EXPANDED_TITLE_MAX_LINES else 1,
                         )
                         Text(
                             text = tagline,

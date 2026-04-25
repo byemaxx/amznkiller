@@ -197,12 +197,7 @@ internal fun UpdatesCard(
                         }
                     },
                 style = MaterialTheme.typography.bodyMedium,
-                color =
-                    if (status == UpdateStatus.Error) {
-                        MaterialTheme.colorScheme.error
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
+                color = if (status == UpdateStatus.Error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
         IconButton(
