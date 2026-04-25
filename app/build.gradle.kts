@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "eu.hxreborn.amznkiller"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "eu.hxreborn.amznkiller"
         minSdk = 29
-        targetSdk = 36
+        targetSdk = 37
 
         versionName = project.property("version.name").toString()
         versionCode = project.property("version.code").toString().toInt()
