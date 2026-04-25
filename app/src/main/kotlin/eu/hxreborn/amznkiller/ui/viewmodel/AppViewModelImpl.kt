@@ -35,8 +35,7 @@ class AppViewModelImpl(
     private val xposedActive = MutableStateFlow(false)
     private val frameworkVersion = MutableStateFlow<String?>(null)
     private val lastRefreshOutcome = MutableStateFlow<SelectorSyncOutcome?>(null)
-    private val launcherIconHidden =
-        MutableStateFlow(!LauncherIconHelper.isLauncherIconVisible(App.instance))
+    private val launcherIconHidden = MutableStateFlow(!LauncherIconHelper.isLauncherIconVisible(App.instance))
 
     override val dashboardUiState: StateFlow<DashboardUiState> =
         combine(

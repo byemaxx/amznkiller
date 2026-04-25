@@ -132,27 +132,26 @@ object ForceDarkHooker {
             for (param in params) {
                 val ok =
                     runCatching {
-                        xposed
-                            .hook(clazz.getDeclaredMethod("setForceDark", param))
-                            .intercept { chain ->
-                                if (!PrefsManager.forceDarkWebview) {
-                                    return@intercept chain.proceed()
-                                }
-                                when (val arg = chain.getArg(0)) {
-                                    is Boolean -> {
-                                        if (!arg) {
-                                            return@intercept chain.proceed(arrayOf(true))
-                                        }
-                                    }
-
-                                    is Int -> {
-                                        if (arg != 2) {
-                                            return@intercept chain.proceed(arrayOf(2))
-                                        }
-                                    }
-                                }
-                                chain.proceed()
+                        val method = clazz.getDeclaredMethod("setForceDark", param)
+                        xposed.hook(method).intercept { chain ->
+                            if (!PrefsManager.forceDarkWebview) {
+                                return@intercept chain.proceed()
                             }
+                            when (val arg = chain.getArg(0)) {
+                                is Boolean -> {
+                                    if (!arg) {
+                                        return@intercept chain.proceed(arrayOf(true))
+                                    }
+                                }
+
+                                is Int -> {
+                                    if (arg != 2) {
+                                        return@intercept chain.proceed(arrayOf(2))
+                                    }
+                                }
+                            }
+                            chain.proceed()
+                        }
                     }
                 if (ok.isSuccess) {
                     Logger.log("Hooked $cls.setForceDark(${param.simpleName})")
