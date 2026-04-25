@@ -98,7 +98,7 @@ kotlin {
 val ktlint: Configuration by configurations.creating
 
 dependencies {
-    ktlint("com.pinterest.ktlint:ktlint-cli:1.8.0")
+    ktlint(libs.ktlint.cli)
 
     compileOnly(libs.libxposed.api)
     implementation(libs.libxposed.service)
