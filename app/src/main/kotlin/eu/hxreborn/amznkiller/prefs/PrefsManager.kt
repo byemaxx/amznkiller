@@ -1,6 +1,8 @@
 package eu.hxreborn.amznkiller.prefs
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import eu.hxreborn.amznkiller.selectors.SelectorSanitizer
 import eu.hxreborn.amznkiller.util.Logger
 import io.github.libxposed.api.XposedInterface
@@ -12,8 +14,10 @@ data class PrefsSnapshot(
     val forceDarkMode: ForceDarkMode,
     val priceChartsEnabled: Boolean,
 ) {
-    fun isForceDarkEnabled(systemInDarkMode: Boolean): Boolean =
-        forceDarkMode.isActive(systemInDarkMode)
+    fun isForceDarkEnabled(context: Context?): Boolean {
+        val nightMode = context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
+        return forceDarkMode.isActive(nightMode == Configuration.UI_MODE_NIGHT_YES)
+    }
 }
 
 object PrefsManager {
@@ -40,9 +44,6 @@ object PrefsManager {
     @Volatile
     var forceDarkMode: ForceDarkMode = ForceDarkMode.OFF
         private set
-
-    val forceDarkWebview: Boolean
-        get() = forceDarkMode == ForceDarkMode.ON
 
     @Volatile
     var priceChartsEnabled: Boolean = Prefs.PRICE_CHARTS_ENABLED.default
