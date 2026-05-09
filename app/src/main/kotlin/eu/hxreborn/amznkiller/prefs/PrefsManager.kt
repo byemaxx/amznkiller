@@ -1,5 +1,6 @@
 package eu.hxreborn.amznkiller.prefs
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -14,6 +15,9 @@ data class PrefsSnapshot(
     val forceDarkMode: ForceDarkMode,
     val priceChartsEnabled: Boolean,
 ) {
+    val forceDarkWebview: Boolean
+        get() = isForceDarkEnabled(currentApplication())
+
     fun isForceDarkEnabled(context: Context?): Boolean {
         val nightMode = context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
         return forceDarkMode.isActive(nightMode == Configuration.UI_MODE_NIGHT_YES)
@@ -44,6 +48,9 @@ object PrefsManager {
     @Volatile
     var forceDarkMode: ForceDarkMode = ForceDarkMode.OFF
         private set
+
+    val forceDarkWebview: Boolean
+        get() = snapshot().forceDarkWebview
 
     @Volatile
     var priceChartsEnabled: Boolean = Prefs.PRICE_CHARTS_ENABLED.default
@@ -92,3 +99,11 @@ object PrefsManager {
         return System.currentTimeMillis() - fetched > Prefs.STALE_THRESHOLD_MS
     }
 }
+
+private fun currentApplication(): Application? =
+    runCatching {
+        Class
+            .forName("android.app.ActivityThread")
+            .getMethod("currentApplication")
+            .invoke(null) as? Application
+    }.getOrNull()
